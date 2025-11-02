@@ -1,0 +1,49 @@
+@startuml
+left to right direction
+
+rectangle "Actores del Negocio" {
+  actor Gerente
+  actor Almacenista
+  actor Ventas
+}
+
+rectangle "Seguimiento de Facturas" {
+  usecase "Obtener facturas del DBS" as U1
+  usecase "Asignar tareas de validación" as U2
+  usecase "Generar reportes de estado" as U9
+}
+
+rectangle  "Cambio de estado de facturas" {
+  usecase "Validar facturas" as U3
+  usecase "Reportar estado de validaciones" as U4
+  usecase "Cambiar estado a 'Invoice'" as U5
+  usecase "Cambiar estado a factura 'awaiting'" as U8
+  usecase "Registrar estados en Excel" as U6
+  usecase "Actualizar información en DBS" as U7
+}
+
+Gerente --> U2
+Gerente --> U5
+Gerente --> U6
+Gerente --> U7
+Gerente --> U8
+Gerente --> U3
+Gerente --> U9
+
+Almacenista --> U3
+Almacenista --> U4
+
+Ventas --> U3
+Ventas --> U4
+Ventas --> U8
+
+U3 --> U4 : <<include>>
+U4 --> U5 : <<extend>>
+U4 --> U8 : <<extend>>
+U8 --> U7 : <<include>>
+U5 --> U7 : <<include>>
+
+U2 --> U3 : <<include>>
+U1 --> U2 : <<include>>
+U7 --> U9 : <<include>>
+@enduml

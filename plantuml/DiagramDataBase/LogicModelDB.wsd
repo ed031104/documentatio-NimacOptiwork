@@ -1,0 +1,124 @@
+@startuml LogicModelDB
+
+!theme plain
+
+left to right direction
+skinparam linetype ortho
+'' Layout tweaks to reduce label/entity overlap
+skinparam nodesep 150
+skinparam ranksep 200
+skinparam noteMargin 50
+skinparam SequenceMessageTextAlignment center
+
+skinparam defaultFontSize 12
+
+entity "Invoice" as Invoice {
+  +InvoiceID : int <<PK>>
+  --
+  STNO : int
+  BOSFX : int
+  SLSTYP : char(1)
+  ENDT8 : varchar(10)
+  DOCSU : char(1)
+  RFDCNO : varchar(20)
+  LNNO : int
+  SOS1 : int
+  PANO20 : varchar(50)
+  DS18 : varchar(50)
+  ORQY : int
+  BOIMCT : int
+  SPQTY : int
+  TRXCD : varchar(5)
+  UNCS : decimal(12,3)
+  UNLS : decimal(12,3)
+  UNSEL : decimal(12,3)
+  WTUM : decimal(12,3)
+  CUNM : varchar(100)
+  SPVIDS : varchar(50)
+  DateEntry : datetime
+  IsCompleted : bit
+}
+
+entity "Rol" as Rol {
+  +Id : int <<PK>>
+  --
+  Name : varchar(50)
+  Description : varchar(255)
+  DateCreated : datetime
+  DateModified : datetime
+}
+
+entity "Task" as Task {
+  +TaskID : int <<PK>>
+  --
+  Description : nvarchar(255)
+  CreatedDate : datetime
+  CreatedBy : nvarchar(50)
+  Invoice : int <<FK>>
+  IsAssigned : bit
+  TaskCode : varchar(20)
+  WarehouseComment : nvarchar(600)
+}
+
+entity "TaskAssignment" as TaskAssignment {
+  +TaskAssignmentID : int <<PK>>
+  --
+  TaskID : int <<FK>>
+  AssignedTo : int <<FK>>
+  AssignedDate : datetime
+  DateStarted : datetime
+  DateCompleted : datetime
+  TimeEstimatedStart : datetime
+  TimeEstimatedEnd : datetime
+}
+
+entity "TaskState" as TaskState {
+  +TaskStateID : int <<PK>>
+  --
+  TaskStateName : nvarchar(50)
+}
+
+entity "TaskStatusHistory" as TaskStatusHistory {
+  +TaskStatusHistoryID : int <<PK>>
+  --
+  TaskAssignmentId : int <<FK>>
+  TaskStateID : int <<FK>>
+  ChangedDate : datetime
+  ChangedBy : nvarchar(50)
+}
+
+entity "User" as User {
+  +Id : int <<PK>>
+  --
+  Email : varchar(100)
+  Username : varchar(50)
+  Password : varchar(255)
+  DateCreated : datetime
+  DateModified : datetime
+  Active : bit
+}
+
+entity "UserRoles" as UserRoles {
+  +Id : int <<PK>>
+  --
+  UserId : int <<FK>>
+  RolID : int <<FK>>
+  CreateBy : varchar(50)
+  ModifiedBy : varchar(50)
+  CreateDate : datetime
+  ModifiedDate : datetime
+}
+
+'------------------------------
+' Relaciones (FK)
+'------------------------------
+
+Invoice ||--o{ Task : "InvoiceID → Invoice"
+Task ||--o{ TaskAssignment : "TaskID → TaskAssignment.TaskID"
+User ||--o{ TaskAssignment : "Id → TaskAssignment.AssignedTo"
+TaskAssignment ||--o{ TaskStatusHistory : "TaskAssignmentID → TaskStatusHistory.TaskAssignmentId"
+TaskState ||--o{ TaskStatusHistory : "TaskStateID → TaskStatusHistory.TaskStateID"
+User ||--o{ UserRoles : "Id → UserRoles.UserId"
+Rol ||--o{ UserRoles : "Id → UserRoles.RolID"
+
+@enduml

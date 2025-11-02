@@ -1,0 +1,13 @@
+@startuml DiagramaColaboracion
+actor "Usuario" as U
+
+object Sistema
+object Invoice
+object Tarea
+
+U -> Sistema : 1. Solicitar asignación de tarea
+Sistema -> Invoice : 2. Obtener datos del Invoice
+Invoice --> Sistema : 3. Devolver datos
+Sistema -> Tarea : 4. Crear tarea con datos del Invoice
+Tarea --> U : 5. Confirmación de tarea creada
+@enduml

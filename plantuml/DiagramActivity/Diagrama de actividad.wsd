@@ -1,0 +1,40 @@
+@startuml AsignacionDeTareas_Gerente
+partition "Módulo de Asignación de Tareas - Gerente" {
+
+start
+
+:Verifica tareas creadas;
+
+if ("¿Existe tarea?") then (Sí)
+    if ("¿Está asignada?") then (Sí)
+        :Notificar;
+        if ("¿El almacenista cambió el estado de la tarea?") then (Sí)
+            stop
+        else (No)
+            :Enviar Email;
+            stop
+        endif
+    else (No)
+        :Asignar a almacenista;
+        :Notificar;
+        if ("¿El almacenista cambió el estado de la tarea?") then (Sí)
+            stop
+        else (No)
+            :Enviar Email;
+            stop
+        endif
+    endif
+else (No)
+    :Crea tarea;
+    :Asignar a almacenista;
+    :Notificar;
+    if ("¿El almacenista cambió el estado de la tarea?") then (Sí)
+        stop
+    else (No)
+        :Enviar Email;
+        stop
+    endif
+endif
+
+}
+@enduml

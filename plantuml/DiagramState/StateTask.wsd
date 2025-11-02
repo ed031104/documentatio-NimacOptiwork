@@ -1,0 +1,12 @@
+@startuml NimacOptiWork
+
+state ALaEspera as "A La Espera"
+[*] --> ALaEspera : se asigna tarea
+
+ALaEspera --> Cancelado : Tarea con datos incorrectos
+ALaEspera --> Completado : Se procesa tarea
+
+Completado --> [*] : se resta documentado asociado a la tarea
+Cancelado --> [*]
+
+@enduml

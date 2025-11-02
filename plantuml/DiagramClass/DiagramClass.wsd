@@ -1,0 +1,96 @@
+@startuml
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Invoice {
+   STNO: int
+   BOSFX: int
+   SLSTYP: char(1)
+   ENDT8: varchar(10)
+   DOCSU: char(1)
+   RFDCNO: varchar(20)
+   LNNO: int
+   SOS1: int
+   PANO20: varchar(50)
+   DS18: varchar(50)
+   ORQY: int
+   BOIMCT: int
+   SPQTY: int
+   TRXCD: varchar(5)
+   UNCS: decimal(12,3)
+   UNLS: decimal(12,3)
+   UNSEL: decimal(12,3)
+   WTUM: decimal(12,3)
+   CUNM: varchar(100)
+   SPVIDS: varchar(50)
+   DateEntry: datetime
+   IsCompleted: bit
+   InvoiceID: int
+}
+class Rol {
+   Name: varchar(50)
+   Description: varchar(255)
+   DateCreated: datetime
+   DateModified: datetime
+   Id: int
+}
+class Task {
+   Description: nvarchar(255)
+   CreatedDate: datetime
+   CREATEDBy: nvarchar(50)
+   Invoice: int
+   IsAssigned: bit
+   TaskCode: varchar(20)
+   WarehouseComment: nvarchar(600)
+   TaskID: int
+}
+class TaskAssignment {
+   TaskID: int
+   AssignedTo: int
+   AssignedDate: datetime
+   dateStarted: datetime
+   dateCompleted: datetime
+   timeEstimatedStart: datetime
+   timeEstimatedEnd: datetime
+   TaskAssignmentID: int
+}
+class TaskState {
+   TaskStateName: nvarchar(50)
+   TaskStateID: int
+}
+class TaskStatusHistory {
+   TaskStateID: int
+   ChangedDate: datetime
+   ChangedBy: nvarchar(50)
+   TaskAssignmentId: int
+   TaskStatusHistoryID: int
+}
+class User {
+   Email: varchar(100)
+   Username: varchar(50)
+   Password: varchar(255)
+   DateCreated: datetime
+   DateModified: datetime
+   Active: bit
+   Id: int
+}
+class UserRoles {
+   UserId: int
+   RolID: int
+   CreateBy: varchar(50)
+   ModifiedBy: varchar(50)
+   CreateDate: datetime
+   ModifiedDate: datetime
+   Id: int
+}
+
+
+Task               -[#595959,plain]-^  Invoice           : "Invoice:InvoiceID"
+TaskAssignment     -[#595959,plain]-^  Task              : "TaskID"
+TaskAssignment     -[#595959,plain]-^  User              : "AssignedTo:Id"
+TaskStatusHistory  -[#595959,plain]-^  TaskAssignment    : "TaskAssignmentId:TaskAssignmentID"
+TaskStatusHistory  -[#595959,plain]-^  TaskState         : "TaskStateID"
+UserRoles          -[#595959,plain]-^  Rol               : "RolID:Id"
+UserRoles          -[#595959,plain]-^  User              : "UserId:Id"
+@enduml

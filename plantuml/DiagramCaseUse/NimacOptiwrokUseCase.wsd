@@ -1,0 +1,44 @@
+@startuml
+
+left to right direction 
+
+rectangle "Actores del Negocio" {
+  actor Gerente
+  actor Almacenista
+  actor Ventas
+  actor JobScheduler
+}
+
+rectangle "Sistema - NimacOptiWork" {
+
+  usecase "Crear tareas" as U1
+  usecase "Asignar tareas" as U2
+  usecase "Visualizar tareas en dashboard" as U3
+  usecase "Visualizar reportes de productividad" as U4
+  usecase "Auto-asignarse tareas" as U5
+  usecase "Cambiar estado de tareas" as U6
+  usecase "Asociar Factura" as U7
+}
+
+' --- Gerente ---
+Gerente --> U1
+Gerente --> U2
+Gerente --> U3
+Gerente --> U4
+Gerente --> U6
+
+' --- Almacenista ---
+Almacenista --> U5
+Almacenista --> U6
+
+' --- Ventas ---
+Ventas --> U5
+Ventas --> U6
+
+' --- JobScheduler ---
+JobScheduler --> U1
+
+U7 --> U1
+
+U1 --> U2
+@enduml

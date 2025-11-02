@@ -1,0 +1,21 @@
+@startuml NimacOptiWork
+
+|Gerente|
+start
+:Obtener facturas desde el DBS (estado: awaiting);
+
+|Gerente|
+:Asignar tareas a Almacenista/Ventas;
+
+|Almacenista|
+:Revisar y validar facturas;
+:Reportar estado de las tareas al Gerente;
+
+|Gerente|
+:Recibir reportes de estado de tareas;
+:Cambiar estado de factura de 'awaiting' a 'invoice';
+:Registrar estados de tareas en Excel;
+:Actualizar información en el DBS;
+
+stop
+@enduml

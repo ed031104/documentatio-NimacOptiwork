@@ -1,0 +1,21 @@
+@startuml NimacOptiWork
+
+skinparam nodeStyle rectangle
+skinparam artifactStyle rectangle
+
+node "PC del Usuario (Windows 11)" {
+    artifact "WinUI3 Desktop App"
+}
+
+node "Servidor BD (Windows Server)" {
+    database "SQL Server" <<SQL>>
+}
+
+node "Servidor AS/400 IBM i" {
+    database "DB Legacy AS400" <<DB2/400>>
+}
+
+"WinUI3 Desktop App" --> "SQL Server" : TCP/IP  (ODBC / ADO.NET)
+"SQL Server" --> "DB Legacy AS400" : Linked Server
+
+@enduml

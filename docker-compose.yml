@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  structurizr:
+    image: structurizr/lite:latest
+    container_name: structurizr
+    ports:
+      - "8080:8080"           # Acceso web a Structurizr Lite
+    volumes:
+      - ./workspace:/usr/local/structurizr  # Tu carpeta local con DSLs
+    restart: unless-stopped
