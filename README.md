@@ -17,13 +17,13 @@ Esta es la forma más sencilla de ejecutar Structurizr Lite:
 
 ```bash
 docker pull structurizr/lite
-docker run -it --rm -p 8080:8080 -v $(pwd)/workspace:/usr/local/structurizr structurizr/lite
+docker run -it --rm -p 8080:8080 -v $(pwd):/usr/local/structurizr structurizr/lite
 ```
 
 Para Windows (PowerShell):
 ```powershell
 docker pull structurizr/lite
-docker run -it --rm -p 8080:8080 -v ${PWD}/workspace:/usr/local/structurizr structurizr/lite
+docker run -it --rm -p 8080:8080 -v ${PWD}:/usr/local/structurizr structurizr/lite
 ```
 
 ### Opción 2: Descarga Directa
