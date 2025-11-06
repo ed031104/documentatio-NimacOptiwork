@@ -1,0 +1,33 @@
+@startuml
+title Asignar Tarea a Usuario (Nivel Entidades)
+
+actor Usuario as U
+participant ServicioAsignacionTarea as SAT
+entity TareaAsignada as TA
+entity TaskStatusHistory as TSH
+
+U -> SAT: assignTaskToUser(idTarea, idUsuario)
+
+SAT -> TA: obtenerPorId(idTarea)
+
+alt Tarea no existe
+    SAT --> U: retornar (no se puede asignar)
+else Tarea existe
+    SAT -> TA: asignarUsuario(idUsuario)
+    SAT -> TA: registrarFechaAsignacion()
+
+    SAT -> TA: actualizarEntidadTarea()
+
+    SAT -> TSH: crearNuevoRegistro()
+    note right TSH
+      nuevo estado = A LA ESPERA
+      fechaCambio = ahora
+      usuarioCambio = usuario que ejecuta
+    end note
+
+    SAT -> TSH: guardarRegistroEstado()
+    
+    SAT --> U: asignación completa
+end
+
+@enduml

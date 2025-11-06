@@ -1,0 +1,24 @@
+@startuml
+title Agregar nuevo estado a tarea asignada - Dominio
+
+actor Usuario as U
+participant ServicioTarea as ST
+entity TaskStatusHistory as TSH
+
+U -> ST: addStateTaskAssignment(idTarea, nuevoEstado)
+
+ST -> TSH: consultar si existe registro con ese estado para esa tarea
+
+alt estado ya existe
+    ST --> U: retornar error "El estado ya existe"
+else estado no existe
+    ST -> TSH: crear nuevo registro estado = nuevoEstado
+    note right TSH
+      guardar fecha del cambio
+      guardar usuario que realizo la acción
+    end note
+
+    ST --> U: retornar éxito
+end
+
+@enduml

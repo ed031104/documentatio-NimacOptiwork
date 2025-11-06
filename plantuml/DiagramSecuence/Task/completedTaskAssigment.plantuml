@@ -1,0 +1,34 @@
+@startuml
+title Completar tarea asignada - Dominio
+
+actor Usuario as U
+participant ServicioTarea as ST
+entity TaskStatusHistory as TSH
+entity TareaAsignada as TA
+entity Factura as F
+
+U -> ST: CompletedTask(idTareaAsignada)
+
+ST -> TSH: consultar estado COMPLETADA para la tarea
+
+alt ya existe estado COMPLETADA
+    ST --> U: retornar error "La tarea ya fue completada"
+else no existe estado COMPLETADA
+
+    ST -> TSH: crear nuevo registro estado = COMPLETADA
+    note right TSH
+      registra fecha y usuario que realizó el cambio
+    end note
+    
+    ST -> TA: obtener la tarea y su Factura asociada
+
+    alt factura no existe
+        ST --> U: retornar error "Factura no encontrada"
+    else factura existe
+        ST -> F: marcar factura como completada
+        ST -> TA: asignar fecha completada en la tarea
+        ST --> U: retornar OK
+    end
+end
+
+@enduml

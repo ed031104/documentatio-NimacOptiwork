@@ -1,0 +1,122 @@
+@startuml
+allowmixing
+title Nimac Optiwork - Diagrama de Paquetes (Hexagonal DDD)
+
+package "Domain"{
+  package "Entities" {
+    class Invoice
+    class Rol
+    class Task
+    class TaskAssignment
+    class TaskState
+    class TaskStatusHistory
+    class User
+    class UserRole
+    class UserSession
+
+    Invoice "1" o-- "0..*" Task: includes
+
+    Task "1" o-- "1" TaskAssignment: has
+
+    User "1" o-- "0..*" TaskAssignment: assigned to
+
+    TaskState "1" o-- "1" TaskStatusHistory: has
+    TaskAssignment "1" o-- "1" TaskStatusHistory: has
+
+    User "1" o-- "1" UserRole: has
+    Rol "1" o-- "0..*" UserRole: includes
+
+    User "1" o-- "0..1" UserSession: has
+  }
+
+  package "Enumerations" {
+    enum StatusInvoicesE
+    enum StatusTaskE
+    enum userRole
+  }
+
+  package "Interfaces" {
+        package "Repositories" {
+            interface IUserRepository
+            interface ITaskRepository
+            interface IInvoiceRepository
+        }
+
+        package "Services" {
+            interface IEmailService
+            interface IservicesGeneric
+            interface IServicesTask
+            interface IServicesInvoice
+            interface IServicesLogin
+        }
+    }
+}
+
+package "Application" {
+    package "Services" {
+            class IEmailService
+            class IservicesGeneric
+            class IServicesTask
+            class IServicesInvoice
+            class IServicesLogin
+
+            IservicesGeneric ..|> Domain.Interfaces.Services.IservicesGeneric: implements
+            IServicesTask ..|> Domain.Interfaces.Services.IServicesTask: implements
+            IServicesInvoice ..|> Domain.Interfaces.Services.IServicesInvoice: implements
+            IServicesLogin ..|> Domain.Interfaces.Services.IServicesLogin: implements
+    }
+}
+
+package "Infrastructure" {
+  package "Context"{
+    class NimacOptiWorkContext
+    interface DbContext
+    NimacOptiWorkContext ..|> DbContext: implements
+  }
+
+  package "Repositories"{
+    class UserRepository
+    class TaskRepository
+    class InvoiceRepository
+
+    InvoiceRepository o-- TaskRepository: manages
+    UserRepository o-- TaskRepository: manages
+
+    UserRepository ..|> Domain.Interfaces.Repositories.IUserRepository: implements
+    TaskRepository ..|> Domain.Interfaces.Repositories.ITaskRepository: implements
+    InvoiceRepository ..|> Domain.Interfaces.Repositories.IInvoiceRepository: implements
+  }
+
+  Context o-- "Repositories": uses
+}
+
+package "Application WinUi3" {
+  package "page"{
+    class LoginPage
+    class DashboardPage
+    class BacklogPage
+    class GestionInvoicePage
+    class GestionUsersPage
+    class GestionTasksPage
+    class MenuPage
+  }
+  package "components"{
+    class StatusInvoicesComponent
+    class StatusTaskTagComponent
+  }
+  package "utils"{
+    class Helpers
+    class AppInitializer
+    class InfoBarHelper
+  }
+  package "assets"{
+    class Images
+    class Styles
+  }
+}
+
+"Application WinUi3" --> "Application"
+"Application" --> "Domain"
+"Domain" --> "Infrastructure"
+
+@enduml

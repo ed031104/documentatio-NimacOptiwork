@@ -5,7 +5,8 @@ services:
     image: structurizr/lite:latest
     container_name: structurizr
     ports:
-      - "8080:8080"           # Acceso web a Structurizr Lite
+      - "8080:8080"
     volumes:
-      - ./workspace:/usr/local/structurizr  # Tu carpeta local con DSLs
+      - "./c4model:/workspace"  # tu carpeta mapeada
+    working_dir: /workspace/workSpaces/NimacOptiWork
     restart: unless-stopped
